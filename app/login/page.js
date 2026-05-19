@@ -1,31 +1,25 @@
 "use client";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
-export default function Login() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+import { signIn } from "next-auth/react";
 
-  // Redirect if already logged in
-  if (session) {
-    router.replace("/profile"); // Change "/profile" to your desired page
-    return null;
-  }
-
+export default function LoginPage() {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div className="bg-white p-10 rounded-2xl shadow-xl w-96">
-        <h2 className="text-3xl font-bold text-center">Login</h2>
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-white">
 
-        <button onClick={() => signIn("google")}
-          className="login-btn bg-red-500">Google</button>
+      <div className="bg-white p-10 rounded-2xl shadow-xl text-center w-[400px]">
+        <h1 className="text-3xl font-bold text-blue-600">Welcome Back 👋</h1>
+        <p className="text-gray-500 mt-2">Login to continue learning</p>
 
-        <button onClick={() => signIn("github")}
-          className="login-btn bg-black">GitHub</button>
+        {/* GitHub Login Button */}
+        <button
+          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+          className="mt-8 w-full bg-black text-white py-3 rounded-lg text-lg hover:opacity-90 transition"
+        >
+          Continue with GitHub
+        </button>
 
-        <button onClick={() => signIn("facebook")}
-          className="login-btn bg-blue-700">Facebook</button>
       </div>
-    </div>
+
+    </main>
   );
 }
