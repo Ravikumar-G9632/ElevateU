@@ -1,17 +1,19 @@
 'use client'
+export const dynamic = 'force-dynamic'
+
 import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useApp } from '../../../lib/context'
 import { saveGithubUser } from '../../../lib/users'
 
 export default function GitHubSuccess() {
   const { dispatch } = useApp()
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
-    const userParam = searchParams.get('user')
-    const error = searchParams.get('error')
+    const params = new URLSearchParams(window.location.search)
+    const userParam = params.get('user')
+    const error = params.get('error')
 
     if (error || !userParam) {
       router.replace('/auth?error=' + (error || 'unknown'))
@@ -20,7 +22,6 @@ export default function GitHubSuccess() {
 
     try {
       const githubUser = JSON.parse(decodeURIComponent(userParam))
-      // Save or retrieve from user DB
       const result = saveGithubUser(githubUser)
       if (result.user) {
         dispatch({ type: 'LOGIN', payload: result.user })
